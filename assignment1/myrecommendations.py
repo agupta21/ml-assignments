@@ -8,7 +8,6 @@ csv_f=csv.reader(f)
 prefs={}
 i=0
 
-# to extract movies
 for line in csv_f:
     prefs[i] = line
     i+=1
@@ -64,7 +63,7 @@ def sim_pearson(p1,p2):
 
 # Returns the best matches for person from the prefs dictionary. 
 # Number of results and similarity function are optional params.
-def topMatches(prefs,person,n=5,similarity=sim_pearson):
+def topMatches(person,n=5,similarity=sim_pearson):
   scores=[(similarity(prefs,person,other),other) 
                   for other in prefs if other!=person]
   scores.sort()
@@ -73,7 +72,7 @@ def topMatches(prefs,person,n=5,similarity=sim_pearson):
 
 # Gets recommendations for a person by using a weighted average
 # of every other user's rankings
-def getRecommendations(prefs,person,similarity=sim_pearson):
+def getRecommendations(person,similarity=sim_pearson):
   totals={}
   simSums={}
   for other in prefs:
@@ -86,10 +85,10 @@ def getRecommendations(prefs,person,similarity=sim_pearson):
     for item in prefs[other]:
 	    
       # only score movies I haven't seen yet
-      if item not in prefs[person] or prefs[person][item]==0:
+      if item not in int(prefs[person]) or int(prefs[person][int(item)])==0:
         # Similarity * Score
         totals.setdefault(item,0)
-        totals[item]+=prefs[other][item]*sim
+        totals[item]+=int(prefs[other]int([item]))*sim
         # Sum of similarities
         simSums.setdefault(item,0)
         simSums[item]+=sim
@@ -102,7 +101,7 @@ def getRecommendations(prefs,person,similarity=sim_pearson):
   rankings.reverse()
   return rankings
 
-def transformPrefs(prefs):
+def transformPrefs():
   result={}
   for person in prefs:
     for item in prefs[person]:
@@ -113,7 +112,7 @@ def transformPrefs(prefs):
   return result
 
 
-def calculateSimilarItems(prefs,n=10):
+def calculateSimilarItems(n=10):
   # Create a dictionary of items showing which other items they
   # are most similar to.
   result={}
@@ -129,7 +128,7 @@ def calculateSimilarItems(prefs,n=10):
     result[item]=scores
   return result
 
-def getRecommendedItems(prefs,itemMatch,user):
+def getRecommendedItems(itemMatch,user):
   userRatings=prefs[user]
   scores={}
   totalSim={}
@@ -140,7 +139,7 @@ def getRecommendedItems(prefs,itemMatch,user):
     for (similarity,item2) in itemMatch[item]:
 
       # Ignore if this user has already rated this item
-      if item2 in userRatings: continue
+      if int(item2) in userRatings: continue
       # Weighted sum of rating times similarity
       scores.setdefault(item2,0)
       scores[item2]+=similarity*rating
