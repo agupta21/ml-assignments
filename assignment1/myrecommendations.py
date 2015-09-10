@@ -30,7 +30,7 @@ def sim_distance(person1,person2):
   return 1/(1+sum_of_squares)
 
 # Returns the Pearson correlation coefficient for p1 and p2
-def sim_pearson(prefs,p1,p2):
+def sim_pearson(p1,p2):
   # Get the list of mutually rated items
   si={}
   for item in prefs[p1]: 
@@ -43,15 +43,15 @@ def sim_pearson(prefs,p1,p2):
   n=len(si)
   
   # Sums of all the preferences
-  sum1=sum([prefs[p1][it] for it in si])
-  sum2=sum([prefs[p2][it] for it in si])
+  sum1=sum([int(prefs[p1][int(it)]) for it in si])
+  sum2=sum([int(prefs[p2][int(it)]) for it in si])
   
   # Sums of the squares
-  sum1Sq=sum([pow(prefs[p1][it],2) for it in si])
-  sum2Sq=sum([pow(prefs[p2][it],2) for it in si])	
+  sum1Sq=sum([pow(int(prefs[p1][int(it)]),2) for it in si])
+  sum2Sq=sum([pow(int(prefs[p2][int(it)]),2) for it in si])	
   
   # Sum of the products
-  pSum=sum([prefs[p1][it]*prefs[p2][it] for it in si])
+  pSum=sum([int(prefs[p1][int(it)])*int(prefs[p2][int(it)]) for it in si])
   
   # Calculate r (Pearson score)
   num=pSum-(sum1*sum2/n)
